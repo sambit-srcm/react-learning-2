@@ -1,0 +1,164 @@
+:root {
+  --color-bg: #f8fafc;
+  --color-card: #ffffff;
+
+  --color-text: #0f172a;
+  --color-primary: #2563eb;
+  --color-danger: #dc2626;
+  --color-border: #cbd5e1;
+
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+
+  --radius-md: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+
+  background: var(--color-bg);
+
+  font-family: Arial, sans-serif;
+}
+
+button {
+  font: inherit;
+}
+input {
+  font: inherit;
+}
+
+.app {
+  max-width: 700px;
+
+  margin: 0 auto;
+
+  padding: var(--space-lg);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.card {
+  background: var(--color-card);
+
+  border: 1px solid var(--color-border);
+
+  border-radius: var(--radius-md);
+
+  padding: var(--space-md);
+}
+
+form.card {
+  display: flex;
+
+  align-items: center;
+
+  gap: var(--space-sm);
+}
+
+.row {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: left;
+
+  gap: var(--space-sm);
+}
+
+.input {
+  flex: 1;
+
+  min-width: 0;
+
+  padding: var(--space-sm);
+
+  border: 1px solid var(--color-border);
+
+  border-radius: var(--radius-md);
+}
+
+.btn {
+  border: none;
+
+  cursor: pointer;
+
+  border-radius: var(--radius-md);
+
+  padding: var(--space-sm) var(--space-md);
+}
+
+.btn--primary {
+  background: var(--color-primary);
+
+  color: white;
+}
+
+.btn--danger {
+  background: var(--color-danger);
+
+  color: white;
+}
+
+.todo-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: var(--space-sm);
+}
+
+.todo-row {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: var(--space-sm);
+}
+
+.todo-left {
+  display: flex;
+
+  align-items: center;
+
+  gap: var(--space-sm);
+
+  flex: 1;
+
+  min-width: 0;
+}
+
+.todo-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: var(--space-sm);
+
+  flex-shrink: 0;
+}
+
+.todo-title {
+  flex: 1;
+
+  min-width: 0;
+
+  overflow-wrap: break-word;
+
+  word-break: break-word;
+}
+
+.completed {
+  text-decoration: line-through;
+
+  opacity: 0.5;
+}
