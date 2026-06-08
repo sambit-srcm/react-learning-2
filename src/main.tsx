@@ -7,6 +7,7 @@ if (!rootElement) {
   throw new Error('Root element #app not found');
 }
 
+// StrictMode renders twice in dev to surface side-effect bugs
 createRoot(rootElement).render(
   <StrictMode>
     <App />

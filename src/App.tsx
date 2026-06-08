@@ -28,6 +28,7 @@ function saveState(state: AppState): void {
 }
 
 export default function App() {
+  // () => syntax: lazy init — runs once on mount, not on every re-render
   const [todos, setTodos] = useState<Todo[]>(() => loadState().todos);
   const [editId, setEditId] = useState<string | null>(() => loadState().form.editId);
   const [title, setTitle] = useState<string>(() => loadState().form.title);
@@ -45,10 +46,10 @@ export default function App() {
     let newTodos: Todo[];
     if (editId) {
       newTodos = todos.map((todo) =>
-        todo.id === editId ? { ...todo, title: trimmed } : todo
+        todo.id === editId ? { ...todo, title: trimmed } : todo // spread keeps other fields intact
       );
       setTodos(newTodos);
-      setEditId(null);
+      setEditId(null); // exit edit mode
       setTitle('');
       persistState(newTodos, null, '');
     } else {
@@ -57,7 +58,7 @@ export default function App() {
         title: trimmed,
         completed: false
       };
-      newTodos = [...todos, newTodo];
+      newTodos = [...todos, newTodo]; // spread instead of push — never mutate state directly
       setTodos(newTodos);
       setTitle('');
       persistState(newTodos, null, '');
@@ -66,8 +67,8 @@ export default function App() {
 
   const handleEdit = (todo: Todo) => {
     console.log('edit clicked', todo.id);
-    setEditId(todo.id);
-    setTitle(todo.title);
+    setEditId(todo.id);   // switches form to edit mode
+    setTitle(todo.title); // pre-fills the input with current title
   };
 
   const handleDelete = (id: string) => {
