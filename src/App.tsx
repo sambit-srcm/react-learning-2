@@ -1,13 +1,43 @@
 import { useState } from 'react';
-import type { Todo } from './types';
+import type { AppState, Todo } from './types';
 import { TodoForm } from './components/TodoForm';
 import { TodoList } from './components/TodoList';
 import { generateId } from './utils/id';
 
+const STORAGE_KEY = 'state';
+
+function loadState(): AppState {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      return { todos: [], form: { title: '', editId: null } };
+    }
+    return JSON.parse(raw) as AppState;
+  } catch (err) {
+    console.error('Failed to load from localStorage', err);
+    return { todos: [], form: { title: '', editId: null } };
+  }
+}
+
+function saveState(state: AppState): void {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (err) {
+    console.error('Failed to save into localStorage', err);
+  }
+}
+
 export default function App() {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [editId, setEditId] = useState<string | null>(null);
-  const [title, setTitle] = useState<string>('');
+  const [todos, setTodos] = useState<Todo[]>(() => loadState().todos);
+  const [editId, setEditId] = useState<string | null>(() => loadState().form.editId);
+  const [title, setTitle] = useState<string>(() => loadState().form.title);
+
+  const persistState = (newTodos: Todo[], newEditId: string | null, newTitle: string) => {
+    saveState({
+      todos: newTodos,
+      form: { title: newTitle, editId: newEditId }
+    });
+  };
 
   const handleSubmit = (inputTitle: string) => {
     const trimmed = inputTitle.trim();
@@ -20,6 +50,7 @@ export default function App() {
       setTodos(newTodos);
       setEditId(null);
       setTitle('');
+      persistState(newTodos, null, '');
     } else {
       const newTodo: Todo = {
         id: generateId(),
@@ -29,6 +60,7 @@ export default function App() {
       newTodos = [...todos, newTodo];
       setTodos(newTodos);
       setTitle('');
+      persistState(newTodos, null, '');
     }
   };
 
@@ -41,6 +73,7 @@ export default function App() {
   const handleDelete = (id: string) => {
     const newTodos = todos.filter((todo) => todo.id !== id);
     setTodos(newTodos);
+    persistState(newTodos, editId, title);
   };
 
   const handleToggle = (id: string) => {
@@ -49,6 +82,7 @@ export default function App() {
       todo.id == id ? { ...todo, completed: !todo.completed } : todo
     );
     setTodos(newTodos);
+    persistState(newTodos, editId, title);
   };
 
   return (
