@@ -19,10 +19,25 @@ function loadState(): AppState {
   }
 }
 
+function saveState(state: AppState): void {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (err) {
+    console.error('Failed to save into localStorage', err);
+  }
+}
+
 export default function App() {
   const [todos, setTodos] = useState<Todo[]>(() => loadState().todos);
   const [editId, setEditId] = useState<string | null>(() => loadState().form.editId);
   const [title, setTitle] = useState<string>(() => loadState().form.title);
+
+  const persistState = (newTodos: Todo[], newEditId: string | null, newTitle: string) => {
+    saveState({
+      todos: newTodos,
+      form: { title: newTitle, editId: newEditId }
+    });
+  };
 
   const handleSubmit = (inputTitle: string) => {
     const trimmed = inputTitle.trim();
@@ -35,6 +50,7 @@ export default function App() {
       setTodos(newTodos);
       setEditId(null);
       setTitle('');
+      persistState(newTodos, null, '');
     } else {
       const newTodo: Todo = {
         id: generateId(),
@@ -44,6 +60,7 @@ export default function App() {
       newTodos = [...todos, newTodo];
       setTodos(newTodos);
       setTitle('');
+      persistState(newTodos, null, '');
     }
   };
 
@@ -56,6 +73,7 @@ export default function App() {
   const handleDelete = (id: string) => {
     const newTodos = todos.filter((todo) => todo.id !== id);
     setTodos(newTodos);
+    persistState(newTodos, editId, title);
   };
 
   const handleToggle = (id: string) => {
@@ -64,6 +82,7 @@ export default function App() {
       todo.id == id ? { ...todo, completed: !todo.completed } : todo
     );
     setTodos(newTodos);
+    persistState(newTodos, editId, title);
   };
 
   return (
