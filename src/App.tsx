@@ -1,13 +1,28 @@
 import { useState } from 'react';
-import type { Todo } from './types';
+import type { AppState, Todo } from './types';
 import { TodoForm } from './components/TodoForm';
 import { TodoList } from './components/TodoList';
 import { generateId } from './utils/id';
 
+const STORAGE_KEY = 'state';
+
+function loadState(): AppState {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      return { todos: [], form: { title: '', editId: null } };
+    }
+    return JSON.parse(raw) as AppState;
+  } catch (err) {
+    console.error('Failed to load from localStorage', err);
+    return { todos: [], form: { title: '', editId: null } };
+  }
+}
+
 export default function App() {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [editId, setEditId] = useState<string | null>(null);
-  const [title, setTitle] = useState<string>('');
+  const [todos, setTodos] = useState<Todo[]>(() => loadState().todos);
+  const [editId, setEditId] = useState<string | null>(() => loadState().form.editId);
+  const [title, setTitle] = useState<string>(() => loadState().form.title);
 
   const handleSubmit = (inputTitle: string) => {
     const trimmed = inputTitle.trim();
