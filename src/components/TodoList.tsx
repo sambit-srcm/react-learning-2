@@ -18,16 +18,16 @@ export function TodoList({ todos, onEdit, onDelete, onToggle }: Props) {
     <div className="card">
       <div className="todo-list">
         {todos.map((todo) => (
-          <div key={todo.id} className="todo-row">
+          <div key={todo.id} className="todo-row"> {/* key lets React track which row changed */}
             <div className="todo-left">
               <input
                 type="checkbox"
                 id={`todo-${todo.id}`}
-                checked={todo.completed}
+                checked={todo.completed}              // controlled checkbox
                 onChange={() => onToggle(todo.id)}
               />
               <label
-                htmlFor={`todo-${todo.id}`}
+                htmlFor={`todo-${todo.id}`} {/* links label to checkbox for click area */}
                 className={todo.completed ? 'todo-title completed' : 'todo-title'}
               >
                 {todo.title}
@@ -37,7 +37,7 @@ export function TodoList({ todos, onEdit, onDelete, onToggle }: Props) {
                 <button
                   className="btn btn--primary"
                   aria-label={`Edit task: "${todo.title}"`}
-                  disabled={todo.completed}
+                  disabled={todo.completed} // can't edit a completed todo
                   onClick={() => onEdit(todo)}
                 >
                   Edit task
