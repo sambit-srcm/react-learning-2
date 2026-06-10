@@ -18,7 +18,7 @@ export function TodoList({ todos, onEdit, onDelete, onToggle }: Props) {
     <div className="card">
       <div className="todo-list">
         {todos.map((todo) => (
-          <div key={todo.id} className="todo-row"> {/* key lets React track which row changed */}
+          <div key={todo.id} className="todo-row">
             <div className="todo-left">
               <input
                 type="checkbox"
@@ -27,7 +27,7 @@ export function TodoList({ todos, onEdit, onDelete, onToggle }: Props) {
                 onChange={() => onToggle(todo.id)}
               />
               <label
-                htmlFor={`todo-${todo.id}`} {/* links label to checkbox for click area */}
+                htmlFor={`todo-${todo.id}`} 
                 className={todo.completed ? 'todo-title completed' : 'todo-title'}
               >
                 {todo.title}
